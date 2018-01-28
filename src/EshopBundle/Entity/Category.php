@@ -11,11 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Description of Product
- *
  * @author freipe
+ * 
  * @ORM\Entity()
- */
-class Product {
+ */ 
+class Category {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -36,25 +36,17 @@ class Product {
     private $description;
     /**
      *
-     * @ORM\Column(type="float")
+     * @ORM\OneToOne(targetEntity="EshopBundle\Entity\Product", mappedBy="parent")
+     * @ORM\JoinColumn(nullable=true, referencedColumnName="id")
      */
-    private $price;
+    private $parent;
     /**
-     * @ORM\ManyToOne(targetEntity="EshopBundle\Entity\Category", inversedBy="products")
-     * @ORM\JoinColumn(name="category_id", nullable=true, referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="EshopBundle\Entity\Product", mappedBy="category")
      */
-    private $category;
+    private $products;
     /**
-     *
-     * @ORM\Column(type="boolean")
+     * @return mixed
      */
-    private $active;
-    /**
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $stock;
-    
     
     public function getId() {
         return $this->id;
@@ -64,13 +56,6 @@ class Product {
         return $this->name;
     }
 
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setName($name) {
-        $this->name = $name;
-    }
     public function getUrl() {
         return $this->url;
     }
@@ -79,20 +64,16 @@ class Product {
         return $this->description;
     }
 
-    public function getPrice() {
-        return $this->price;
+    public function getParent() {
+        return $this->parent;
     }
 
-    public function getCategory() {
-        return $this->category;
+    public function setId($id) {
+        $this->id = $id;
     }
 
-    public function getActive() {
-        return $this->active;
-    }
-
-    public function getStock() {
-        return $this->stock;
+    public function setName($name) {
+        $this->name = $name;
     }
 
     public function setUrl($url) {
@@ -103,20 +84,15 @@ class Product {
         $this->description = $description;
     }
 
-    public function setPrice($price) {
-        $this->price = $price;
+    public function setParent($parent) {
+        $this->parent = $parent;
+    }
+    public function getProducts() {
+        return $this->products;
     }
 
-    public function setCategory($category) {
-        $this->category = $category;
-    }
-
-    public function setActive($active) {
-        $this->active = $active;
-    }
-
-    public function setStock($stock) {
-        $this->stock = $stock;
+    public function setProducts($products) {
+        $this->products = $products;
     }
 
 
