@@ -1,15 +1,20 @@
 <?php
 namespace EshopBundle\Entity;
-
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 /**
- * Description of User
- * @ORM\Entity()
- * @author Peta
+ * Class Order
+ *
+ * pozn. Zde data o uzivatei duplikujeme - musime, at uz kvuli fakture, nebo z duvodu, ze si necha balik zaslat na jinou
+ * adresu nebo jej na stejne adrese prevezme nekdo jiny
+ *
+ * @package EshopBundle\Entity
+ * @ORM\Entity(repositoryClass="EshopBundle\Repository\OrderRepository")
  */
-class Order {
+class Order
+{
     /**
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
@@ -17,11 +22,11 @@ class Order {
     /**
      * @ORM\Column(type="datetime")
      */
-    private $dateOfCreation;
+    private $order_date;
     /**
      * @ORM\Column(type="float")
      */
-    private $totalPrice;
+    private $total_price;
     /**
      * @ORM\Column(type="text")
      */
@@ -29,7 +34,7 @@ class Order {
     /**
      * @ORM\Column(type="string", length=128)
      */
-    private $adress;
+    private $address;
     /**
      * @ORM\Column(type="string", length=128)
      */
@@ -37,112 +42,253 @@ class Order {
     /**
      * @ORM\Column(type="string", length=128)
      */
-    private $surrname;
+    private $surname;
     /**
-     * @ORM\Column(type="string", unique=true, length=128)
+     * @ORM\Column(type="string", length=255)
      */
     private $email;
     /**
      * @ORM\Column(type="string", length=16)
      */
-    private $telephone;
+    private $phone;
     /**
+     * @ORM\OneToMany(targetEntity="EshopBundle\Entity\OrderProduct", mappedBy="order")
+     */
+    private $order_product;
+    /**
+     * V praxi je lepsi udelat specialni tabulku stavu a tabulku M:N - stavy a objednavky - potom bude mozne sledovat
+     * jednotlive objednavky, jakych nabyvaly stavu v case
+     *
      * @ORM\Column(type="string", length=32)
      */
-    private $status;
+    private $state;
     /**
-     * @ORM\OneToMany(targetEntity="EshopBundle\Entity\Discount", mappedBy="order")
+     * Pokud je uzivatel prihlaseny, muzeme si zapamatovat, ze jde o nej
+     * - NENI POVINNE!
+     *
+     * @ORM\ManyToOne(targetEntity="EshopBundle\Entity\User", inversedBy="order")
+     * @ORM\JoinColumn(nullable=true, referencedColumnName="id")
+     */
+    private $user;
+    /**
+     * @ORM\ManyToOne(targetEntity="EshopBundle\Entity\Discount", inversedBy="order")
+     * @ORM\JoinColumn(nullable=true, referencedColumnName="id")
      */
     private $discount;
-    
-    public function getDiscount() {
-        return $this->discount;
+    /**
+     * Order constructor.
+     */
+    public function __construct()
+    {
+        // Jelikoz k objednavce muze pribyt vice produktu, tak je nutne pracovat s promennou jako s polem
+        $this->order_product = new ArrayCollection();
     }
-
-    public function setDiscount($discount) {
-        $this->discount = $discount;
-    }
-
-        
-    public function getId() {
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
         return $this->id;
     }
-
-    public function getDateOfCreation() {
-        return $this->dateOfCreation;
+    /**
+     * @param mixed $id
+     * @return Order
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
     }
-
-    public function getTotalPrice() {
-        return $this->totalPrice;
+    /**
+     * @return mixed
+     */
+    public function getOrderDate()
+    {
+        return $this->order_date;
     }
-
-    public function getNote() {
+    /**
+     * @param mixed $order_date
+     * @return Order
+     */
+    public function setOrderDate($order_date)
+    {
+        $this->order_date = $order_date;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getTotalPrice()
+    {
+        return $this->total_price;
+    }
+    /**
+     * @param mixed $total_price
+     * @return Order
+     */
+    public function setTotalPrice($total_price)
+    {
+        $this->total_price = $total_price;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getNote()
+    {
         return $this->note;
     }
-
-    public function getAdress() {
-        return $this->adress;
+    /**
+     * @param mixed $note
+     * @return Order
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+        return $this;
     }
-
-    public function getName() {
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+    /**
+     * @param mixed $address
+     * @return Order
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
         return $this->name;
     }
-
-    public function getSurrname() {
-        return $this->surrname;
+    /**
+     * @param mixed $name
+     * @return Order
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
-
-    public function getEmail() {
+    /**
+     * @return mixed
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+    /**
+     * @param mixed $surname
+     * @return Order
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
         return $this->email;
     }
-
-    public function getTelephone() {
-        return $this->telephone;
-    }
-
-    public function getStatus() {
-        return $this->status;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setDateOfCreation($dateOfCreation) {
-        $this->dateOfCreation = $dateOfCreation;
-    }
-
-    public function setTotalPrice($totalPrice) {
-        $this->totalPrice = $totalPrice;
-    }
-
-    public function setNote($note) {
-        $this->note = $note;
-    }
-
-    public function setAdress($adress) {
-        $this->adress = $adress;
-    }
-
-    public function setName($name) {
-        $this->name = $name;
-    }
-
-    public function setSurrname($surrname) {
-        $this->surrname = $surrname;
-    }
-
-    public function setEmail($email) {
+    /**
+     * @param mixed $email
+     * @return Order
+     */
+    public function setEmail($email)
+    {
         $this->email = $email;
+        return $this;
     }
-
-    public function setTelephone($telephone) {
-        $this->telephone = $telephone;
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
-
-    public function setStatus($status) {
-        $this->status = $status;
+    /**
+     * @param mixed $phone
+     * @return Order
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+        return $this;
     }
-
-
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+    /**
+     * @param mixed $state
+     * @return Order
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getOrderProduct()
+    {
+        return $this->order_product;
+    }
+    /**
+     * @param mixed $order_product
+     * @return Order
+     */
+    public function setOrderProduct($order_product)
+    {
+        $this->order_product = $order_product;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    /**
+     * @param mixed $user
+     * @return Order
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+    /**
+     * @param mixed $discount
+     * @return Order
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+        return $this;
+    }
 }

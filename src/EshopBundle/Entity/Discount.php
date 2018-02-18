@@ -1,15 +1,17 @@
 <?php
 namespace EshopBundle\Entity;
-
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 /**
- * Description of User
- * @ORM\Entity()
- * @author Peta
+ * Class Discount
+ *
+ * @package EshopBundle\Entity
+ * @ORM\Entity(repositoryClass="EshopBundle\Repository\DiscountRepository")
  */
-class Discount {
+class Discount
+{
     /**
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
@@ -19,13 +21,13 @@ class Discount {
      */
     private $name;
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
     /**
      * @ORM\Column(type="float")
      */
-    private $percent;
+    private $percentage;
     /**
      * @ORM\Column(type="string", length=32)
      */
@@ -35,66 +37,147 @@ class Discount {
      */
     private $applied;
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $validityTo;
-    
-    public function getId() {
+    private $valid_to;
+    /**
+     * @ORM\OneToMany(targetEntity="EshopBundle\Entity\Order", mappedBy="discount")
+     */
+    private $order;
+    /**
+     * Discount constructor.
+     */
+    public function __construct()
+    {
+        // jelikoz jednu slevu muze mit X objednavek, pak je nutne s hodnotou pracovat jako s polem
+        $this->order = new ArrayCollection();
+    }
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
         return $this->id;
     }
-
-    public function getName() {
+    /**
+     * @param mixed $id
+     * @return Discount
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
         return $this->name;
     }
-
-    public function getDescription() {
+    /**
+     * @param mixed $name
+     * @return Discount
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
         return $this->description;
     }
-
-    public function getPercent() {
-        return $this->percent;
+    /**
+     * @param mixed $description
+     * @return Discount
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
     }
-
-    public function getCode() {
+    /**
+     * @return mixed
+     */
+    public function getPercentage()
+    {
+        return $this->percentage;
+    }
+    /**
+     * @param mixed $percentage
+     * @return Discount
+     */
+    public function setPercentage($percentage)
+    {
+        $this->percentage = $percentage;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getCode()
+    {
         return $this->code;
     }
-
-    public function getApplied() {
+    /**
+     * @param mixed $code
+     * @return Discount
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getApplied()
+    {
         return $this->applied;
     }
-
-    public function getValidityTo() {
-        return $this->validityTo;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setName($name) {
-        $this->name = $name;
-    }
-
-    public function setDescription($description) {
-        $this->description = $description;
-    }
-
-    public function setPercent($percent) {
-        $this->percent = $percent;
-    }
-
-    public function setCode($code) {
-        $this->code = $code;
-    }
-
-    public function setApplied($applied) {
+    /**
+     * @param mixed $applied
+     * @return Discount
+     */
+    public function setApplied($applied)
+    {
         $this->applied = $applied;
+        return $this;
     }
-
-    public function setValidityTo($validityTo) {
-        $this->validityTo = $validityTo;
+    /**
+     * @return mixed
+     */
+    public function getValidTo()
+    {
+        return $this->valid_to;
     }
-
-
-    
+    /**
+     * @param mixed $valid_to
+     * @return Discount
+     */
+    public function setValidTo($valid_to)
+    {
+        $this->valid_to = $valid_to;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+    /**
+     * @param mixed $order
+     * @return Discount
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+        return $this;
+    }
 }

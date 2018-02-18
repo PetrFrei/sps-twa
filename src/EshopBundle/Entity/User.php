@@ -1,17 +1,18 @@
 <?php
 namespace EshopBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 /**
- * Description of User
- * @ORM\Entity()
- * @author Peta
+ * Class User
+ *
+ * @package EshopBundle\Entity
+ * @ORM\Entity(repositoryClass="EshopBundle\Repository\UserRepository")
  */
-class User {
+class User
+{
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Id()
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
     /**
@@ -21,91 +22,175 @@ class User {
     /**
      * @ORM\Column(type="string", length=128)
      */
-    private $surrname;
+    private $surname;
     /**
-     * @ORM\Column(type="string", unique=true, length=128)
+     * @ORM\Column(type="string", unique=true, length=255)
      */
     private $email;
     /**
-     * @ORM\Column(type="string", length=128)
+     * @ORM\Column(type="string", length=255)
      */
-    private $heslo;
+    private $password;
     /**
-     * @ORM\Column(type="string", length=16)
+     * options - default signalizuje, ze pokud tato hodnota nebude vyplnena, tak se jako vychozi pouzije ROLE_USER
+     *
+     * @ORM\Column(type="string", length=16, options={"default": "ROLE_USER"})
      */
     private $role;
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
      */
-    private $adress;
+    private $address;
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
      */
-    private $telephone;
-    
-    public function getId() {
+    private $phone;
+    /**
+     * @ORM\OneToMany(targetEntity="EshopBundle\Entity\Order", mappedBy="user")
+     */
+    private $order;
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
         return $this->id;
     }
-
-    public function getName() {
+    /**
+     * @param mixed $id
+     * @return User
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
         return $this->name;
     }
-
-    public function getSurrname() {
-        return $this->surrname;
+    /**
+     * @param mixed $name
+     * @return User
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
-
-    public function getEmail() {
+    /**
+     * @return mixed
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+    /**
+     * @param mixed $surname
+     * @return User
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
         return $this->email;
     }
-
-    public function getHeslo() {
-        return $this->heslo;
+    /**
+     * @param mixed $email
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
     }
-
-    public function getRole() {
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+    /**
+     * @param mixed $password
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
         return $this->role;
     }
-
-    public function getAdress() {
-        return $this->adress;
-    }
-
-    public function getTelephone() {
-        return $this->telephone;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function setName($name) {
-        $this->name = $name;
-    }
-
-    public function setSurrname($surrname) {
-        $this->surrname = $surrname;
-    }
-
-    public function setEmail($email) {
-        $this->email = $email;
-    }
-
-    public function setHeslo($heslo) {
-        $this->heslo = $heslo;
-    }
-
-    public function setRole($role) {
+    /**
+     * @param mixed $role
+     * @return User
+     */
+    public function setRole($role)
+    {
         $this->role = $role;
+        return $this;
     }
-
-    public function setAdress($adress) {
-        $this->adress = $adress;
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
-
-    public function setTelephone($telephone) {
-        $this->telephone = $telephone;
+    /**
+     * @param mixed $address
+     * @return User
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+        return $this;
     }
-
-
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+    /**
+     * @param mixed $phone
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+    /**
+     * @param mixed $order
+     * @return User
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+        return $this;
+    }
 }
